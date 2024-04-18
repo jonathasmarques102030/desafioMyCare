@@ -1,8 +1,28 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
 import { Card, Typography, TextField, Button, Grid, Box } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const router = useRouter();
+
+  const handleLogin = () => {
+    const data = JSON.parse(localStorage.getItem("cadastroData"));
+
+    if (data && data.email === email && data.senha === senha) {
+      localStorage.setItem("isLoggedIn", "true");
+      router.push("/");
+    } else {
+      alert("Email ou senha incorretos");
+    }
+
+    setEmail("");
+    setSenha("");
+  };
+
   return (
     <>
       <Grid
@@ -41,6 +61,8 @@ export default function Login() {
                   required
                   type="email"
                   fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item>
@@ -50,11 +72,18 @@ export default function Login() {
                   required
                   type="password"
                   fullWidth
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
                 />
               </Grid>
 
               <Grid item>
-                <Button variant="contained" color="primary" fullWidth>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={handleLogin}
+                >
                   Login
                 </Button>
               </Grid>

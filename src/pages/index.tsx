@@ -1,5 +1,5 @@
 import { Typography, Button, Grid, Box } from "@mui/material";
-import Header from "./header/Header";
+import Header from "../@components/header/Header";
 
 export default function Component() {
   return (

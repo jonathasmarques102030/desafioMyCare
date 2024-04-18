@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 const healthUnits = [
   { name: "Unidade Pitangui", shifts: ["Manhã", "Tarde"] },
@@ -10,6 +10,14 @@ export function useUnidades() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedShift, setSelectedShift] = useState("");
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    const cadastroData = localStorage.getItem("cadastroData");
+    if (cadastroData) {
+      const { nome } = JSON.parse(cadastroData);
+      setName(nome);
+    }
+  }, []);
 
   const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedUnit(event.target.value);
