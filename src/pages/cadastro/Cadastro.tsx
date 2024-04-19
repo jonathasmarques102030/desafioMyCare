@@ -1,26 +1,34 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Card, Typography, TextField, Button, Grid, Box } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
 
 import { useRouter } from "next/router";
+import { AuthContext } from "@/contexts/AuthContext";
+
+interface User {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface register {
+  usuario: User[];
+}
 
 export default function Cadastro() {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const router = useRouter();
+  const { registerUser } = useContext(AuthContext);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleCadastro = () => {
-    const data = { nome, email, senha };
-    localStorage.setItem("cadastroData", JSON.stringify(data));
+  async function handleCadastro() {
+    const user: User = { name, email, password };
+    await registerUser(user);
 
-    setNome("");
-    setEmail("");
-    setSenha("");
-
-    router.push("/");
-  };
+    router.push("/login");
+  }
 
   return (
     <>
@@ -58,8 +66,8 @@ export default function Cadastro() {
                   label="Nome"
                   required
                   fullWidth
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item>
@@ -81,8 +89,8 @@ export default function Cadastro() {
                   required
                   type="password"
                   fullWidth
-                  value={senha}
-                  onChange={(e) => setSenha(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item>
