@@ -1,3 +1,4 @@
+import { units } from "@/services/units";
 import { useState, useMemo, useEffect } from "react";
 
 const healthUnits = [
@@ -32,10 +33,11 @@ export function useUnidades() {
     setName(event.target.value);
   };
 
-  const handleConfirm = () => {
-    const data = { name, selectedUnit, selectedShift };
-    localStorage.setItem("unidadesData", JSON.stringify(data));
-  };
+  async function handleConfirm() {
+    const api = await units();
+
+    console.log(api);
+  }
 
   const horario = useMemo(
     () => healthUnits.find((unit) => unit.name === selectedUnit)?.shifts || [],

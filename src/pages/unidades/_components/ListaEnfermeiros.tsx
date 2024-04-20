@@ -18,12 +18,12 @@ interface UnidadesData {
 export function UnidadesList() {
   const [data, setData] = useState<UnidadesData | null>(null);
 
-  useEffect(() => {
-    const unidadesData = localStorage.getItem("enfermeiroName");
-    if (unidadesData) {
-      setData(JSON.parse(unidadesData));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const unidadesData = localStorage.getItem("enfermeiroName");
+  //   if (unidadesData) {
+  //     setData(JSON.parse(unidadesData));
+  //   }
+  // }, []);
 
   if (!data) {
     return <div>Nenhum dado disponível</div>;
