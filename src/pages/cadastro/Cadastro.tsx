@@ -25,9 +25,9 @@ export default function Cadastro() {
 
   async function handleCadastro() {
     const user: User = { name, email, password };
-    await registerUser(user);
+    await registerUser(user)
 
-    router.push("/login");
+    router.push('/login')
   }
 
   return (

@@ -1,26 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { Card, Typography, TextField, Button, Grid, Box } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setSenha] = useState("");
   const router = useRouter();
 
-  const handleLogin = () => {
-    const data = JSON.parse(localStorage.getItem("cadastroData"));
+  const { signIn } = useContext(AuthContext)
 
-    if (data && data.email === email && data.senha === senha) {
-      localStorage.setItem("isLoggedIn", "true");
-      router.push("/");
-    } else {
-      alert("Email ou senha incorretos");
-    }
+  async function handleLogin(data: any) {
+    await signIn(data)
 
-    setEmail("");
-    setSenha("");
   };
 
   return (
@@ -72,7 +66,7 @@ export default function Login() {
                   required
                   type="password"
                   fullWidth
-                  value={senha}
+                  value={password}
                   onChange={(e) => setSenha(e.target.value)}
                 />
               </Grid>

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { setCookie, parseCookies } from "nookies";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
 import Router from "next/router";
 
 import {
@@ -11,13 +11,12 @@ import {
 import { api } from "../services/api";
 
 type UserLogin = {
-  name?: string;
   email: string;
   password: string;
 };
 
 type User = {
-  name: string;
+  name?: string;
   email: string;
   password: string;
 };
@@ -45,7 +44,6 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserLogin | null>(null);
-  const [cadastroUser, setCadastroUser] = useState<UserLogin | null>(null);
 
   const isAuthenticated = !!user;
 
@@ -53,53 +51,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { "nextauth.token": token } = parseCookies();
 
     if (token) {
-      recoverUserInformation().then((response) => {
-        setUser(response.user);
-      });
+      recoverUserInformation()
+        .then((response) => {
+          setUser(response.user);
+        })
+        .catch((error) => {
+          console.error("Erro ao recuperar informações do usuário:", error);
+          setUser(null);
+          destroyCookie(undefined, "nextauth.token");
+          Router.push("/login");
+        });
     }
   }, []);
 
   async function signIn({ email, password }: SignInData) {
-    const { token, user } = await login({
-      email,
-      password,
-    });
+    try {
+      const { token, user } = await login({ email, password });
 
-    setCookie(undefined, "nextauth.token", token, {
-      maxAge: 60 * 60 * 1, // 1 hour
-    });
+      setCookie(undefined, "nextauth.token", token, {
+        maxAge: 60 * 60 * 1, // 1 hora
+      });
 
-    const response = await api.post("/login", { email, password });
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
-    if (response.data == "Email válido") {
-      Router.push("/administracao");
+      setUser(user);
+
+      Router.push("/");
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      alert("Falha ao fazer login. Por favor, tente novamente.");
     }
-
-    api.defaults.headers["Authorization"] = `Bearer ${token}`;
-
-    setUser(user);
   }
 
   async function signOut() {
-    await logout();
+    try {
+      await logout();
+      
+      setUser(null);
 
-    setUser(null);
+      destroyCookie(undefined, "nextauth.token");
 
-    setCookie(undefined, "nextauth.token", "", {
-      maxAge: -1,
-    });
-
-    Router.push("/");
+      Router.push("/");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      alert("Falha ao fazer logout. Por favor, tente novamente.");
+    }
   }
 
-  async function registerUser({ name, email, password }: User) {
-    const response = await register({
-      name,
-      email,
-      password,
-    });
+  async function registerUser({ name, email, password }: RegisterData) {
+    try {
+      const userData = { name, email, password };
+      await register(userData);
 
-    setCadastroUser(response.cadastroUser);
+    } catch (error) {
+      console.error("Erro ao registrar usuário:", error);
+      alert("Falha ao registrar usuário. Por favor, tente novamente.");
+    }
   }
 
   return (
