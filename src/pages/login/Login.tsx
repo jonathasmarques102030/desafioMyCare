@@ -9,13 +9,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setSenha] = useState("");
   const router = useRouter();
+  interface Login {
+    email: string;
+    password: string;
+  }
 
-  const { signIn } = useContext(AuthContext)
+  const { signIn } = useContext(AuthContext);
 
-  async function handleLogin(data: any) {
-    await signIn(data)
+  async function handleLogin() {
+    const user: Login = { email, password };
+    await signIn(user);
 
-  };
+    router.push("/");
+  }
 
   return (
     <>

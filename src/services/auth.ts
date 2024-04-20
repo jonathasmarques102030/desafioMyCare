@@ -16,22 +16,33 @@ interface Register {
 const delay = (amount: number) =>
   new Promise((resolve) => setTimeout(resolve, amount));
 
-export async function login(user: User) {
+export async function login({ email, password }: User) {
   try {
     await delay(1000);
 
-    const response = await api.get("/login", {
-      params: {
-        email: user.email,
-        password: user.password,
-      },
-    });
+    const response = await api.get("/enfermeiros");
 
     if (response.status !== 200) {
       throw new Error("Falha ao fazer login.");
     }
 
-    return response.data;
+    const enfermeiro = response.data.find(
+      (enfermeiro: any) =>
+        enfermeiro.email === email && enfermeiro.password === password
+    );
+
+    if (enfermeiro && enfermeiro.name) {
+      localStorage.setItem("enfermeiroName", enfermeiro.name);
+    }
+
+    if (!enfermeiro) {
+      throw new Error("Falha ao fazer login.");
+    }
+
+    return {
+      user: enfermeiro,
+      token: uuid(),
+    };
   } catch (error) {
     console.error("Erro ao fazer login:", error);
     throw new Error("Falha ao fazer login.");
@@ -45,7 +56,7 @@ export async function register(user: Register) {
     const response = await api.post("/enfermeiros", {
       name: user.name,
       email: user.email,
-      password: user.password
+      password: user.password,
     });
 
     if (response.status !== 201) {
@@ -62,7 +73,6 @@ export async function register(user: Register) {
 export async function logout() {
   try {
     await delay(1000);
-
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
     throw new Error("Falha ao fazer logout.");
@@ -73,7 +83,6 @@ export async function recoverUserInformation() {
   try {
     await delay(1000);
 
-  
     return {
       user: {
         email: "email@email.com",

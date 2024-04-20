@@ -19,7 +19,7 @@ export function UnidadesList() {
   const [data, setData] = useState<UnidadesData | null>(null);
 
   useEffect(() => {
-    const unidadesData = localStorage.getItem("unidadesData");
+    const unidadesData = localStorage.getItem("enfermeiroName");
     if (unidadesData) {
       setData(JSON.parse(unidadesData));
     }

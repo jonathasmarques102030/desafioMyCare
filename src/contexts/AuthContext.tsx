@@ -8,7 +8,6 @@ import {
   register,
   recoverUserInformation,
 } from "../services/auth";
-import { api } from "../services/api";
 
 type UserLogin = {
   email: string;
@@ -66,13 +65,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signIn({ email, password }: SignInData) {
     try {
-      const { token, user } = await login({ email, password });
+      const { user, token } = await login({ email, password });
 
       setCookie(undefined, "nextauth.token", token, {
-        maxAge: 60 * 60 * 1, // 1 hora
+        maxAge: 60 * 60 * 1, // 1 hour
       });
-
-      api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
       setUser(user);
 
@@ -86,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function signOut() {
     try {
       await logout();
-      
+
       setUser(null);
 
       destroyCookie(undefined, "nextauth.token");
@@ -102,7 +99,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const userData = { name, email, password };
       await register(userData);
-
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
       alert("Falha ao registrar usuário. Por favor, tente novamente.");
