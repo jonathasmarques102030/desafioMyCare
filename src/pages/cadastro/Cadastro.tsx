@@ -93,7 +93,8 @@ export default function Cadastro() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12} display='flex' gap={2}>
+                <Grid item xs={6}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -102,6 +103,17 @@ export default function Cadastro() {
                 >
                   Criar nova conta
                 </Button>
+                </Grid>
+                <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  href="/login"
+                >
+                  Já tem cadastro?
+                </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Box>

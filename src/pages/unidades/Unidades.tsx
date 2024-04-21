@@ -3,7 +3,6 @@ import { Grid, TextField, MenuItem, Button, Box } from "@mui/material";
 import { useUnidades } from "./useUnidades";
 import Header from "../../@components/header/Header";
 import { UnidadesList } from "./_components/ListaEnfermeiros";
-import { units } from "@/services/units";
 
 const healthUnits = [
   { unidade: "Unidade Pitangui", horario: ["Manhã", "Tarde"] },
@@ -15,7 +14,7 @@ export default function Unidades() {
   const {
     selectedUnit,
     selectedShift,
-    horario,
+    turno,
     name,
     handleUnitChange,
     handleShiftChange,
@@ -65,7 +64,7 @@ export default function Unidades() {
                 value={selectedShift}
                 onChange={handleShiftChange}
               >
-                {horario.map((shift, index) => (
+                {turno.map((shift, index) => (
                   <MenuItem value={shift} key={index}>
                     {shift}
                   </MenuItem>
@@ -88,7 +87,7 @@ export default function Unidades() {
           )}
         </Grid>
         <Grid item xs={12}>
-          {/* <UnidadesList /> */}
+          <UnidadesList />
         </Grid>
       </Grid>
     </>

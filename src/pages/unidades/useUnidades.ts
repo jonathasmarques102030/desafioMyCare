@@ -1,4 +1,4 @@
-import { units } from "@/services/units";
+import { registerUnit, units } from "@/services/units";
 import { useState, useMemo, useEffect } from "react";
 
 const healthUnits = [
@@ -11,11 +11,11 @@ export function useUnidades() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedShift, setSelectedShift] = useState("");
   const [name, setName] = useState("");
-
+  
   useEffect(() => {
-    const cadastroData = localStorage.getItem("cadastroData");
+    const cadastroData = localStorage.getItem("enfermeiroName");
     if (cadastroData) {
-      const { nome } = JSON.parse(cadastroData);
+      const nome = cadastroData
       setName(nome);
     }
   }, []);
@@ -34,12 +34,13 @@ export function useUnidades() {
   };
 
   async function handleConfirm() {
-    const api = await units();
+   const unit = { name, unidade: selectedUnit, horario: selectedShift }
+   const resUnit = registerUnit(unit)
 
-    console.log(api);
+   return resUnit
   }
 
-  const horario = useMemo(
+  const turno = useMemo(
     () => healthUnits.find((unit) => unit.name === selectedUnit)?.shifts || [],
     [selectedUnit]
   );
@@ -47,8 +48,8 @@ export function useUnidades() {
   return {
     selectedUnit,
     selectedShift,
-    horario,
     name,
+    turno,
     handleUnitChange,
     handleShiftChange,
     handleConfirm,

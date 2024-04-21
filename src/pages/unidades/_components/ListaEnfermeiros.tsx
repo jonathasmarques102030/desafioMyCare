@@ -8,25 +8,33 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { units } from "@/services/units";
 
-interface UnidadesData {
+interface Unidade {
   name: string;
-  selectedUnit: string;
-  selectedShift: string;
+  unidade: string;
+  horario: string;
 }
 
 export function UnidadesList() {
-  const [data, setData] = useState<UnidadesData | null>(null);
+  const [unidades, setUnidades] = useState<Unidade[]>([]);
 
-  // useEffect(() => {
-  //   const unidadesData = localStorage.getItem("enfermeiroName");
-  //   if (unidadesData) {
-  //     setData(JSON.parse(unidadesData));
-  //   }
-  // }, []);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const unidadesFromApi = await pegaUnidades();
+        setUnidades(unidadesFromApi);
+      } catch (error) {
+        console.error("Erro ao buscar unidades:", error);
+      }
+    }
 
-  if (!data) {
-    return <div>Nenhum dado disponível</div>;
+    fetchData();
+  }, []);
+
+  async function pegaUnidades() {
+    const api = await units();
+    return api;
   }
 
   return (
@@ -40,11 +48,13 @@ export function UnidadesList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell>{data.name}</TableCell>
-            <TableCell>{data.selectedUnit}</TableCell>
-            <TableCell>{data.selectedShift}</TableCell>
-          </TableRow>
+          {unidades.map((unidade, index) => (
+            <TableRow key={index}>
+              <TableCell>{unidade.name}</TableCell>
+              <TableCell>{unidade.unidade}</TableCell>
+              <TableCell>{unidade.horario}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

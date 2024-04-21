@@ -77,15 +77,22 @@ export default function Login() {
                 />
               </Grid>
 
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={handleLogin}
-                >
-                  Login
-                </Button>
+              <Grid item xs={12} display='flex' gap={2}>
+                <Grid item xs={5}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleLogin}
+                    fullWidth
+                  >
+                    Login
+                  </Button>
+                </Grid>
+                <Grid item xs={7}>
+                  <Button fullWidth variant="contained" color="primary" href="/cadastro">
+                    Não tem um cadastro?
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Box>
