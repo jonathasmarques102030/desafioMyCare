@@ -1,26 +1,52 @@
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Grid, TextField, MenuItem, Button, Box } from "@mui/material";
 import Header from "../../@components/header/Header";
 import UnidadesList from "./_components/ListaEnfermeiros";
-import useUnidades from "./useUnidades";
+import { registerUnit } from "@/services/units";
 
 const healthUnits = [
-  { unidade: "Unidade Pitangui", horario: ["Manhã", "Tarde"] },
-  { unidade: "Unidade Carlos Prates", horario: ["Manhã", "Tarde", "Noite"] },
-  { unidade: "Unidade Hodilon Behrens", horario: ["Tarde", "Noite"] },
+  { name: "Unidade Pitangui", shifts: ["Manhã", "Tarde"] },
+  { name: "Unidade Carlos Prates", shifts: ["Manhã", "Tarde", "Noite"] },
+  { name: "Unidade Hodilon Behrens", shifts: ["Tarde", "Noite"] },
 ];
 
 export default function Unidades() {
-  const {
-    selectedUnit,
-    selectedShift,
-    turno,
-    name,
-    handleUnitChange,
-    handleShiftChange,
-    handleConfirm,
-    handleNameChange,
-  } = useUnidades();
+  const [selectedUnit, setSelectedUnit] = useState("");
+  const [selectedShift, setSelectedShift] = useState("");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const cadastroData = localStorage.getItem("enfermeiroName");
+    if (cadastroData) {
+      const nome = cadastroData;
+      setName(nome);
+    }
+  }, []);
+
+  const handleUnitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedUnit(event.target.value);
+    setSelectedShift("");
+  };
+
+  const handleShiftChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedShift(event.target.value);
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  async function handleConfirm() {
+    const unit = { name, unidade: selectedUnit, horario: selectedShift };
+    const resUnit = registerUnit(unit);
+
+    return resUnit;
+  }
+
+  const turno = useMemo(
+    () => healthUnits.find((unit) => unit.name === selectedUnit)?.shifts || [],
+    [selectedUnit]
+  );
 
   return (
     <>
@@ -49,8 +75,8 @@ export default function Unidades() {
               onChange={handleUnitChange}
             >
               {healthUnits.map((unit, index) => (
-                <MenuItem value={unit.unidade} key={index}>
-                  {unit.unidade}
+                <MenuItem value={unit.name} key={index}>
+                  {unit.name}
                 </MenuItem>
               ))}
             </TextField>
