@@ -16,7 +16,7 @@ interface Unidade {
   horario: string;
 }
 
-export function UnidadesList() {
+export default function UnidadesList() {
   const [unidades, setUnidades] = useState<Unidade[]>([]);
 
   useEffect(() => {

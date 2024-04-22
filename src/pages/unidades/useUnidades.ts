@@ -1,4 +1,4 @@
-import { registerUnit, units } from "@/services/units";
+import { registerUnit } from "@/services/units";
 import { useState, useMemo, useEffect } from "react";
 
 const healthUnits = [
@@ -7,7 +7,7 @@ const healthUnits = [
   { name: "Unidade Hodilon Behrens", shifts: ["Tarde", "Noite"] },
 ];
 
-export function useUnidades() {
+export default function useUnidades() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedShift, setSelectedShift] = useState("");
   const [name, setName] = useState("");

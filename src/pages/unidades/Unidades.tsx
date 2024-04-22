@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, TextField, MenuItem, Button, Box } from "@mui/material";
-import { useUnidades } from "./useUnidades";
 import Header from "../../@components/header/Header";
-import { UnidadesList } from "./_components/ListaEnfermeiros";
+import UnidadesList from "./_components/ListaEnfermeiros";
+import useUnidades from "./useUnidades";
 
 const healthUnits = [
   { unidade: "Unidade Pitangui", horario: ["Manhã", "Tarde"] },
