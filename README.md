@@ -26,6 +26,6 @@ Este é um aplicativo desenvolvido para facilitar o gerenciamento de turnos para
    git clone https://github.com/seu-usuario/seu-projeto.git
 
    cd seu-projeto
-   npm install
+   npm install [Talvez possa ser necessário usar o --force]
 
    npm run dev
