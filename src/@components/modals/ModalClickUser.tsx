@@ -7,6 +7,7 @@ import {
   DialogActions,
   Button,
 } from "@material-ui/core";
+import { destroyCookie } from "nookies";
 
 interface ModalClickUserProps {
   open: boolean;
@@ -18,9 +19,10 @@ export const ModalClickUser: React.FC<ModalClickUserProps> = ({
   handleClose,
 }) => {
   const handleLogout = () => {
-    localStorage.removeItem("cadastroData");
-    localStorage.removeItem("isLoggedIn");
+    destroyCookie(null, "nextauth.token");
+    localStorage.removeItem("enfermeiroName");
     handleClose();
+    location.reload();
   };
 
   return (
@@ -35,11 +37,11 @@ export const ModalClickUser: React.FC<ModalClickUserProps> = ({
         id="form-dialog-title"
         style={{ color: "black", textAlign: "center" }}
       >
-        Título
+        Deseja sair?
       </DialogTitle>
       <DialogContent>
         <DialogContentText style={{ color: "gray", textAlign: "center" }}>
-          Esta é uma breve descrição.
+          Clique em um dos nossos botões para o que deseja.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

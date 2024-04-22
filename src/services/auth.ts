@@ -70,15 +70,6 @@ export async function register(user: Register) {
   }
 }
 
-export async function logout() {
-  try {
-    await delay(1000);
-  } catch (error) {
-    console.error("Erro ao fazer logout:", error);
-    throw new Error("Falha ao fazer logout.");
-  }
-}
-
 export async function recoverUserInformation() {
   try {
     await delay(1000);

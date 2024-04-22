@@ -2,12 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import Router from "next/router";
 
-import {
-  login,
-  logout,
-  register,
-  recoverUserInformation,
-} from "../services/auth";
+import { login, register, recoverUserInformation } from "../services/auth";
 
 type UserLogin = {
   email: string;
@@ -35,7 +30,6 @@ type AuthContextType = {
   isAuthenticated: boolean;
   user: User | null;
   signIn: (data: SignInData) => Promise<void>;
-  signOut: () => Promise<void>;
   registerUser: (data: RegisterData) => Promise<void>;
 };
 
@@ -80,21 +74,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function signOut() {
-    try {
-      await logout();
-
-      setUser(null);
-
-      destroyCookie(undefined, "nextauth.token");
-
-      Router.push("/");
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-      alert("Falha ao fazer logout. Por favor, tente novamente.");
-    }
-  }
-
   async function registerUser({ name, email, password }: RegisterData) {
     try {
       const userData = { name, email, password };
@@ -107,7 +86,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, signIn, signOut, registerUser }}
+      value={{
+        user,
+        isAuthenticated,
+        signIn,
+        registerUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

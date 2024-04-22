@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Box, Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { ModalClickUser } from "../modals";
 import { parseCookies } from "nookies";
 
 export default function Header(ctx: any) {
-  const { ["nextauth.token"]: token } = parseCookies(ctx);
+  const [token, setToken] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -17,6 +17,11 @@ export default function Header(ctx: any) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const { ["nextauth.token"]: token } = parseCookies();
+    setToken(token);
+  }, []);
 
   return (
     <Grid container justifyContent="space-between" alignItems="center" xs={12}>

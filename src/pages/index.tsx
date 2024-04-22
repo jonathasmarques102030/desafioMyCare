@@ -1,3 +1,4 @@
+import React from "react";
 import { Typography, Button, Grid, Box } from "@mui/material";
 import Header from "../@components/header/Header";
 
@@ -17,10 +18,18 @@ export default function Component() {
               m: "auto",
             }}
           >
-            <Typography variant="h4" gutterBottom sx={{ color: "#4062f4" }}>
+            <Typography
+              variant="h4"
+              gutterBottom
+              sx={{ color: "#4062f4", textAlign: "center" }}
+            >
               Turnos Disponíveis!
             </Typography>
-            <Typography variant="body1" gutterBottom sx={{ color: "#4062f4" }}>
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{ color: "#4062f4", textAlign: "center" }}
+            >
               Estamos procurando enfermeiros para preencher nossos turnos
               disponíveis. Se você está disponível, por favor, considere se
               candidatar.
